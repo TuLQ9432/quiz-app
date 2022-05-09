@@ -1,7 +1,8 @@
+import { memo } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { Container, Alert, Link } from "@mui/material";
 
-export default function ErrorNotFoundPage() {
+function ErrorNotFoundPage() {
   return (
     <Container maxWidth="sm" sx={{ my: 4 }}>
       <Alert icon={false} severity="info">
@@ -14,3 +15,5 @@ export default function ErrorNotFoundPage() {
     </Container>
   );
 }
+
+export default memo(ErrorNotFoundPage);

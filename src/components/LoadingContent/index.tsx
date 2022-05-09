@@ -1,6 +1,7 @@
+import { memo } from "react";
 import { Stack, Box, CircularProgress, Typography } from "@mui/material";
 
-export default function LoadingContent({ text }: { text?: string }) {
+function LoadingContent({ text }: { text?: string }) {
   return (
     <Stack justifyContent="center" alignItems="center" height="100%">
       <Box textAlign="center">
@@ -18,3 +19,5 @@ export default function LoadingContent({ text }: { text?: string }) {
     </Stack>
   );
 }
+
+export default memo(LoadingContent);
