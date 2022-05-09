@@ -10,16 +10,13 @@ import {
   TextField,
   Button,
   Snackbar,
-  Dialog,
-  DialogContent,
-  DialogContentText,
-  CircularProgress,
 } from "@mui/material";
 import { useConfirm } from "material-ui-confirm";
 import { QuestionOutputContext } from "../context";
 import { AdminQuestionInput } from "../../../../models/question";
 import { ApiError } from "../../../../models/error";
 import questionApi from "../../../../services/question";
+import WaitingDialog from "../../../../components/WaitingDialog";
 import LoadingContent from "../../../../components/LoadingContent";
 
 export default function QuestionDetail() {
@@ -343,18 +340,8 @@ export default function QuestionDetail() {
           {errorMessage}
         </Alert>
       </Snackbar>
-      <Dialog open={isSubmitting}>
-        <DialogContent sx={{ textAlign: "center" }}>
-          <CircularProgress sx={{ mb: 1 }} />
-          <DialogContentText>Saving question...</DialogContentText>
-        </DialogContent>
-      </Dialog>
-      <Dialog open={isDeleting}>
-        <DialogContent sx={{ textAlign: "center" }}>
-          <CircularProgress sx={{ mb: 1 }} />
-          <DialogContentText>Deleting question...</DialogContentText>
-        </DialogContent>
-      </Dialog>
+      <WaitingDialog isWaiting={isSubmitting} text="Saving question..." />
+      <WaitingDialog isWaiting={isDeleting} text="Deleting question..." />
     </>
   );
 }

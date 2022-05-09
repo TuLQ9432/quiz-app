@@ -17,13 +17,10 @@ import {
   ListItemText,
   Button,
   Typography,
-  Dialog,
-  DialogContent,
-  DialogContentText,
-  CircularProgress,
 } from "@mui/material";
 import FlexScrollBox from "../../../../components/FlexScrollBox";
 import LoadingContent from "../../../../components/LoadingContent";
+import WaitingDialog from "../../../../components/WaitingDialog";
 import { QuestionOutputContext } from "../context";
 import { AdminQuestionOutput } from "../../../../models/question";
 import questionApi from "../../../../services/question";
@@ -210,12 +207,7 @@ export default function QuestionList() {
           </Stack>
         </Container>
       </Stack>
-      <Dialog open={isDeleting}>
-        <DialogContent sx={{ textAlign: "center" }}>
-          <CircularProgress sx={{ mb: 1 }} />
-          <DialogContentText>Deleting question...</DialogContentText>
-        </DialogContent>
-      </Dialog>
+      <WaitingDialog isWaiting={isDeleting} text="Deleting question..." />
     </>
   );
 }

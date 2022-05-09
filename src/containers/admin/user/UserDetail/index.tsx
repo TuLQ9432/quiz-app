@@ -11,10 +11,6 @@ import {
   MenuItem,
   Button,
   Snackbar,
-  Dialog,
-  DialogContent,
-  DialogContentText,
-  CircularProgress,
   Avatar,
 } from "@mui/material";
 import { UserOutputContext } from "../context";
@@ -22,6 +18,7 @@ import { EditUserInput } from "../../../../models/user";
 import { ApiError } from "../../../../models/error";
 import userApi from "../../../../services/user";
 import LoadingContent from "../../../../components/LoadingContent";
+import WaitingDialog from "../../../../components/WaitingDialog";
 
 const roles = ["admin", "user"];
 
@@ -131,86 +128,93 @@ export default function UserDetail() {
                 {errorMessage}
               </Alert>
             </Container>
-          ) : initialFormInput && (
-            <Stack justifyContent="center" alignItems="stretch" height="100%">
-              <Stack direction="column" alignItems="center" spacing={1} my={3}>
-                <Controller
-                  name="username"
-                  control={control}
-                  defaultValue={initialFormInput.username}
-                  rules={{ required: true }}
-                  render={({ field }) => (
-                    <TextField
-                      fullWidth
-                      label="Username"
-                      variant="outlined"
-                      size="small"
-                      type="text"
-                      error={!!errors.username}
-                      helperText={errors.username ? "Required" : " "}
-                      {...field}
-                    />
-                  )}
-                />
-                <Controller
-                  name="email"
-                  control={control}
-                  defaultValue={initialFormInput.email}
-                  rules={{ required: true }}
-                  render={({ field }) => (
-                    <TextField
-                      fullWidth
-                      label="Email"
-                      variant="outlined"
-                      size="small"
-                      type="email"
-                      error={!!errors.email}
-                      helperText={errors.email ? "Required" : " "}
-                      {...field}
-                    />
-                  )}
-                />
-                <Controller
-                  name="avatar"
-                  control={control}
-                  defaultValue={initialFormInput.avatar}
-                  rules={{ required: true }}
-                  render={({ field }) => (
-                    <TextField
-                      fullWidth
-                      label="Avatar link"
-                      variant="outlined"
-                      size="small"
-                      type="text"
-                      error={!!errors.avatar}
-                      helperText={errors.avatar ? "Required" : " "}
-                      {...field}
-                    />
-                  )}
-                />
-                <Box pb={3}>
-                  <Avatar
-                    alt="Avatar preview"
-                    src={getNonEmptyAvatarLink()}
-                    sx={{ width: "128px", height: "128px" }}
-                  />
-                </Box>
-                <TextField
-                  fullWidth
-                  select
-                  label="Role"
-                  defaultValue={initialFormInput.role}
-                  size="small"
-                  {...register("role")}
+          ) : (
+            initialFormInput && (
+              <Stack justifyContent="center" alignItems="stretch" height="100%">
+                <Stack
+                  direction="column"
+                  alignItems="center"
+                  spacing={1}
+                  my={3}
                 >
-                  {roles.map((option) => (
-                    <MenuItem key={"option-" + option} value={option}>
-                      {option}
-                    </MenuItem>
-                  ))}
-                </TextField>
+                  <Controller
+                    name="username"
+                    control={control}
+                    defaultValue={initialFormInput.username}
+                    rules={{ required: true }}
+                    render={({ field }) => (
+                      <TextField
+                        fullWidth
+                        label="Username"
+                        variant="outlined"
+                        size="small"
+                        type="text"
+                        error={!!errors.username}
+                        helperText={errors.username ? "Required" : " "}
+                        {...field}
+                      />
+                    )}
+                  />
+                  <Controller
+                    name="email"
+                    control={control}
+                    defaultValue={initialFormInput.email}
+                    rules={{ required: true }}
+                    render={({ field }) => (
+                      <TextField
+                        fullWidth
+                        label="Email"
+                        variant="outlined"
+                        size="small"
+                        type="email"
+                        error={!!errors.email}
+                        helperText={errors.email ? "Required" : " "}
+                        {...field}
+                      />
+                    )}
+                  />
+                  <Controller
+                    name="avatar"
+                    control={control}
+                    defaultValue={initialFormInput.avatar}
+                    rules={{ required: true }}
+                    render={({ field }) => (
+                      <TextField
+                        fullWidth
+                        label="Avatar link"
+                        variant="outlined"
+                        size="small"
+                        type="text"
+                        error={!!errors.avatar}
+                        helperText={errors.avatar ? "Required" : " "}
+                        {...field}
+                      />
+                    )}
+                  />
+                  <Box pb={3}>
+                    <Avatar
+                      alt="Avatar preview"
+                      src={getNonEmptyAvatarLink()}
+                      sx={{ width: "128px", height: "128px" }}
+                    />
+                  </Box>
+                  <TextField
+                    fullWidth
+                    select
+                    label="Role"
+                    defaultValue={initialFormInput.role}
+                    size="small"
+                    {...register("role")}
+                  >
+                    {roles.map((option) => (
+                      <MenuItem key={"option-" + option} value={option}>
+                        {option}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                </Stack>
               </Stack>
-            </Stack>
+            )
           )}
         </Container>
         <Container maxWidth={false} sx={{ mb: 3 }}>
@@ -237,12 +241,7 @@ export default function UserDetail() {
           {errorMessage}
         </Alert>
       </Snackbar>
-      <Dialog open={isSubmitting}>
-        <DialogContent sx={{ textAlign: "center" }}>
-          <CircularProgress sx={{ mb: 1 }} />
-          <DialogContentText>Saving user...</DialogContentText>
-        </DialogContent>
-      </Dialog>
+      <WaitingDialog isWaiting={isSubmitting} text="Saving user..." />
     </>
   );
 }

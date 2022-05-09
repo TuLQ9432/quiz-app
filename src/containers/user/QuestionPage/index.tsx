@@ -18,13 +18,10 @@ import {
   RadioGroup,
   Radio,
   FormControlLabel,
-  Dialog,
-  DialogContent,
-  DialogContentText,
-  CircularProgress,
 } from "@mui/material";
 import UserTopBar from "../../../components/UserTopBar";
 import LoadingContent from "../../../components/LoadingContent";
+import WaitingDialog from "../../../components/WaitingDialog";
 import { authActions } from "../../../store/auth/slice";
 import { userQuizActions } from "../../../store/user/slice";
 
@@ -228,12 +225,10 @@ export default function QuestionPage() {
           </Container>
         </Stack>
       </Stack>
-      <Dialog open={isSubmitting}>
-        <DialogContent sx={{ textAlign: "center" }}>
-          <CircularProgress sx={{ mb: 1 }} />
-          <DialogContentText>Submitting your answers...</DialogContentText>
-        </DialogContent>
-      </Dialog>
+      <WaitingDialog
+        isWaiting={isSubmitting}
+        text="Submitting your answers..."
+      />
     </>
   );
 }

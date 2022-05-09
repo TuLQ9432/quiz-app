@@ -10,14 +10,11 @@ import {
   MenuItem,
   Button,
   Snackbar,
-  Dialog,
-  DialogContent,
-  DialogContentText,
-  CircularProgress,
 } from "@mui/material";
 import { NewUserInput } from "../../../../models/user";
 import { ApiError } from "../../../../models/error";
 import userApi from "../../../../services/user";
+import WaitingDialog from "../../../../components/WaitingDialog";
 
 const roles = ["admin", "user"];
 
@@ -163,12 +160,7 @@ export default function NewUser() {
           {errorMessage}
         </Alert>
       </Snackbar>
-      <Dialog open={isSubmitting}>
-        <DialogContent sx={{ textAlign: "center" }}>
-          <CircularProgress sx={{ mb: 1 }} />
-          <DialogContentText>Saving user...</DialogContentText>
-        </DialogContent>
-      </Dialog>
+      <WaitingDialog isWaiting={isSubmitting} text="Saving user..." />
     </>
   );
 }

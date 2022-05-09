@@ -1,12 +1,7 @@
 import { Navigate, Outlet, useLocation } from "react-router-dom";
-import {
-  Dialog,
-  DialogContent,
-  DialogContentText,
-  CircularProgress,
-  Box,
-} from "@mui/material";
+import { Box } from "@mui/material";
 import LoadingContent from "../../../components/LoadingContent";
+import WaitingDialog from "../../../components/WaitingDialog";
 import { useAppSelector, useAppDispatch } from "../../../hooks";
 import { authActions, AuthStatuses } from "../../../store/auth/slice";
 
@@ -43,12 +38,10 @@ export default function AuthGuard() {
     return (
       <>
         <Outlet />
-        <Dialog open={authStatus === AuthStatuses.LOGGING_OUT}>
-          <DialogContent sx={{ textAlign: "center" }}>
-            <CircularProgress sx={{ mb: 1 }} />
-            <DialogContentText>Logging out...</DialogContentText>
-          </DialogContent>
-        </Dialog>
+        <WaitingDialog
+          isWaiting={authStatus === AuthStatuses.LOGGING_OUT}
+          text="Logging out..."
+        />
       </>
     );
   }
