@@ -1,5 +1,4 @@
 import {
-  useRef,
   useState,
   Dispatch,
   SetStateAction,
@@ -12,7 +11,6 @@ import { useConfirm } from "material-ui-confirm";
 import {
   Stack,
   Container,
-  Box,
   Alert,
   List,
   ListItem,
@@ -24,6 +22,7 @@ import {
   DialogContentText,
   CircularProgress,
 } from "@mui/material";
+import FlexScrollBox from "../../../../components/FlexScrollBox";
 import LoadingContent from "../../../../components/LoadingContent";
 import { QuestionOutputContext } from "../context";
 import { AdminQuestionOutput } from "../../../../models/question";
@@ -89,8 +88,6 @@ function QuestionListItemActions({
 
 export default function QuestionList() {
   const navigate = useNavigate();
-  const listBoxOuterRef = useRef<HTMLDivElement>(null);
-  const listBoxRef = useRef<HTMLDivElement>(null);
   const [questionList, setQuestionList] = useState<AdminQuestionOutput[]>([]);
   const [questionCount, setQuestionCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
@@ -120,29 +117,6 @@ export default function QuestionList() {
       });
   }, [page, pageCount]);
 
-  useEffect(() => {
-    const handleResize = () => {
-      const listBoxOuter = listBoxOuterRef.current;
-      const listBox = listBoxRef.current;
-      if (listBox && listBoxOuter) {
-        const lastScrollY = window.scrollY;
-        listBox.style.height = "0px";
-        const newHeight = listBoxOuter.clientHeight;
-        if (newHeight > 200) listBox.style.height = newHeight.toString() + "px";
-        else {
-          listBox.style.height = "200px";
-          window.scroll(0, lastScrollY);
-        }
-      }
-    };
-    if (!isLoading) {
-      handleResize();
-      window.removeEventListener("resize", handleResize);
-      window.addEventListener("resize", handleResize);
-    }
-    return () => window.removeEventListener("resize", handleResize);
-  }, [isLoading]);
-
   const switchToNew = useCallback(() => {
     navigate("new");
   }, [navigate]);
@@ -169,70 +143,62 @@ export default function QuestionList() {
               <Typography variant="h6" component="p">
                 {questionCount} question{questionCount > 1 && "s"}
               </Typography>
-              <Box
-                border="2px solid #0085FF"
-                borderRadius={3}
-                flex={1}
-                overflow="hidden"
-                ref={listBoxOuterRef}
-              >
-                <Box overflow="auto" ref={listBoxRef}>
-                  <List disablePadding>
-                    {questionList.map((q, i) => (
-                      <ListItem
-                        key={"question-" + q.id}
-                        divider={i + 1 < questionCount}
-                        component={Stack}
-                        direction={{
-                          xs: "column",
-                          sm: "row",
+              <FlexScrollBox isLoading={isLoading}>
+                <List disablePadding>
+                  {questionList.map((q, i) => (
+                    <ListItem
+                      key={"question-" + q.id}
+                      divider={i + 1 < questionCount}
+                      component={Stack}
+                      direction={{
+                        xs: "column",
+                        sm: "row",
+                      }}
+                      spacing={{
+                        xs: 1,
+                        sm: 3,
+                      }}
+                      sx={{
+                        pb: {
+                          xs: 2,
+                          sm: 1,
+                        },
+                      }}
+                    >
+                      <ListItemText
+                        primary={q.question}
+                        secondary={
+                          <>
+                            Answers: {q.answer1}; {q.answer2}; {q.answer3};{" "}
+                            {q.answer4}
+                            <br />
+                            Correct answer: {q.correctanswer}
+                          </>
+                        }
+                        primaryTypographyProps={{
+                          fontWeight: "fontWeightBold",
                         }}
-                        spacing={{
-                          xs: 1,
-                          sm: 3,
+                        secondaryTypographyProps={{
+                          color: "black",
                         }}
                         sx={{
-                          pb: {
-                            xs: 2,
-                            sm: 1,
+                          alignSelf: {
+                            xs: "flex-start",
+                            sm: "center",
                           },
                         }}
-                      >
-                        <ListItemText
-                          primary={q.question}
-                          secondary={
-                            <>
-                              Answers: {q.answer1}; {q.answer2}; {q.answer3};{" "}
-                              {q.answer4}
-                              <br />
-                              Correct answer: {q.correctanswer}
-                            </>
-                          }
-                          primaryTypographyProps={{
-                            fontWeight: "fontWeightBold",
-                          }}
-                          secondaryTypographyProps={{
-                            color: "black",
-                          }}
-                          sx={{
-                            alignSelf: {
-                              xs: "flex-start",
-                              sm: "center",
-                            },
-                          }}
+                      />
+                      <Stack direction="row" spacing={2}>
+                        <QuestionListItemActions
+                          item={q}
+                          setIsDeleting={setIsDeleting}
+                          resetList={resetList}
                         />
-                        <Stack direction="row" spacing={2}>
-                          <QuestionListItemActions
-                            item={q}
-                            setIsDeleting={setIsDeleting}
-                            resetList={resetList}
-                          />
-                        </Stack>
-                      </ListItem>
-                    ))}
-                  </List>
-                </Box>
-              </Box>
+                      </Stack>
+                    </ListItem>
+                  ))}
+                </List>
+              </FlexScrollBox>
             </Stack>
           )}
         </Container>
