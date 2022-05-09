@@ -1,4 +1,3 @@
-import { PayloadAction } from "@reduxjs/toolkit";
 import { call, put, select, takeLatest } from "@redux-saga/core/effects";
 import {
   UserQuestionListOutput,
@@ -35,10 +34,13 @@ function* handleSaveAnswers() {
   localStorage.setItem("answerList", JSON.stringify(answerList));
 }
 
-function* handleSubmitAnswerList(action: PayloadAction<UserAnswerList>) {
+function* handleSubmitAnswerList() {
+  const answerList: UserAnswerList = yield select(
+    (state: RootState) => state.userQuiz.answerList
+  );
   const response: UserResultList = yield call(
     questionApi.submitAnswerList,
-    action.payload
+    answerList
   );
   if (response.length === 0)
     response.push({

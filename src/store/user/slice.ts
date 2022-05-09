@@ -64,7 +64,7 @@ const userQuizSlice = createSlice({
         state.answerList[answerListIndex] = action.payload;
       }
     },
-    submitAnswerList(_state, _action: PayloadAction<UserAnswerList>) {},
+    submitAnswerList() {},
     submitAnswerListSuccess(state, action: PayloadAction<UserResultList>) {
       state.resultList = action.payload;
     },

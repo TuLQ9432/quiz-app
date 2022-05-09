@@ -84,9 +84,9 @@ export default function QuestionPage() {
   }, [saveAnswer, previousQuestion]);
 
   const handleSubmitAnswerList = useCallback(() => {
-    dispatch(userQuizActions.submitAnswerList(answerList));
     setIsSubmitting(true);
-  }, [dispatch, answerList]);
+    dispatch(userQuizActions.submitAnswerList());
+  }, [dispatch]);
 
   useEffect(() => {
     if (answerList.length === 0) setAnswer("");
