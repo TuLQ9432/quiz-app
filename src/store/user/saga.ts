@@ -1,4 +1,4 @@
-import { call, put, select, takeLatest } from "@redux-saga/core/effects";
+import { call, put, select, takeLatest } from "redux-saga/effects";
 import {
   UserQuestionListOutput,
   UserQuestionOutput,

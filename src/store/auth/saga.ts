@@ -8,7 +8,7 @@ import {
   delay,
   select,
   takeLatest,
-} from "@redux-saga/core/effects";
+} from "redux-saga/effects";
 import {
   AuthLoginInput,
   AuthLoginOutput,
